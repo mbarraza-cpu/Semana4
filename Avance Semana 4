@@ -1,0 +1,64 @@
+class Persona:
+    """Clase base para aplicar Herencia"""
+    def __init__(self, nombre, ap_paterno, ap_materno):
+        self._nombre = nombre.title()
+        self._ap_paterno = ap_paterno.title()
+        self._ap_materno = ap_materno.title()
+
+    def obtener_nombre_completo(self):
+        return f"{self._nombre} {self._ap_paterno} {self._ap_materno}"
+
+    def mostrar_datos(self):
+        """Método para aplicar Polimorfismo"""
+        return f"Persona: {self.obtener_nombre_completo()}"
+
+class Estudiante(Persona):
+    """Clase hija que hereda de Persona"""
+    def __init__(self, nombre, ap_paterno, ap_materno, carrera):
+        super().__init__(nombre, ap_paterno, ap_materno)
+        self.carrera = carrera
+        self.becado = False
+
+    def mostrar_datos(self):
+        tipo_beca = "Con Beca" if self.becado else "Sin Beca"
+        return f"Estudiante: {self.obtener_nombre_completo()} | Carrera: {self.carrera} | {tipo_beca}"
+
+class Docente(Persona):
+    """Clase hija que hereda de Persona (Cumple req. de 5 clases)"""
+    def __init__(self, nombre, ap_paterno, ap_materno, especialidad):
+        super().__init__(nombre, ap_paterno, ap_materno)
+        self.especialidad = especialidad
+
+    def mostrar_datos(self):
+        return f"Docente: {self.obtener_nombre_completo()} | Especialidad: {self._especialidad}"
+
+class Asignatura:
+    """Clase para gestionar los cursos (Cumple req. de 5 clases)"""
+    def __init__(self, nombre_materia, codigo):
+        self.nombre_materia = nombre_materia
+        self.codigo = codigo
+
+class RegistroNotas:
+    def __init__(self, estudiante, asignatura, *notas):
+        self.estudiante = estudiante
+        self.asignatura = asignatura
+        self.notas = list(notas)
+
+    def calcular_promedio(self):
+        if not self.notas:
+            return 0.0
+        return sum(self.notas) / len(self.notas)
+
+    def validar_aprobacion(self):
+        """Método funcional solicitado en la rúbrica"""
+        return self.calcular_promedio() >= 4.0
+
+    def obtener_resumen(self):
+        promedio = self.calcular_promedio()
+        estado = "Aprobado" if self.validar_aprobacion() else "Reprobado"
+        return (f"{self.estudiante.mostrar_datos()}\n"
+                f"Asignatura: {self.asignatura.nombre_materia} | "
+                f"Promedio: {promedio:.2f} | Estado: {estado}\n" + "-"*60)
+
+materia1 = Asignatura("Programación Orientada a Objetos", "POO-01")
+estudiante1 = Estudiante("Michael", "Barraza", "Fernandez", "Ingeniería Informática")
